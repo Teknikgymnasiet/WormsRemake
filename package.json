@@ -7,21 +7,26 @@
     "start": "npm run build:live",
     "web": "node webserver.js",
     "build:live": "nodemon --exec ./node_modules/.bin/ts-node -- ./src/main.ts",
-    "compile": "tsc --out ./target/game.js ./src/main.ts"
+    "compile": "browserify \"src/main.ts\" -p [ tsify --noImplicitAny ] > bundle.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@types/node": "^8.5.1",
-    "nodemon": "^1.13.0",
-    "ts-node": "^4.0.2",
+    "@types/node": "^8.5.9",
+    "browserify": "^15.2.0",
+    "nodemon": "^1.14.11",
+    "ts-node": "^4.1.0",
+    "tslint": "^5.9.1",
     "typescript": "^2.6.2"
   },
   "dependencies": {
     "connect": "^3.6.5",
+    "gulp": "^3.9.1",
+    "gulp-typescript": "^3.2.4",
     "http": "0.0.0",
-    "phaser-ce": "^2.9.3",
-    "serve-static": "^1.13.1"
+    "phaser-ce": "^2.10.0",
+    "serve-static": "^1.13.1",
+    "tsify": "^3.0.4"
   }
 }

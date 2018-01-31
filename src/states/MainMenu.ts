@@ -1,5 +1,6 @@
 export class MainMenu {
-    constructor(){
+    public game:any;
+    constructor(){ // aa
 
     }
 

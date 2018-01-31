@@ -1,35 +1,36 @@
-///<reference path="./lib/phaser.comments.d.ts"/>
-module Teknikgymansiet {
-  export class WormsRemake {
-      private _assetList:any;
+import { MainMenu } from "./states/MainMenu";
 
-      constructor() {
-          this.game = new Phaser.Game(1600 /*Width*/, 900/*Height*/, Phaser.AUTO, 'content', {
-              preload: this.preload,
-              create: this.create,
-              update: this.update,
-              render: this.render
-            });
-      }
+export class WormsRemake {
+    constructor() {
+        this.game = new Phaser.Game(1600 /*Width*/, 900/*Height*/, Phaser.AUTO, 'content', {
+            preload: this.preload,
+            create: this.create,
+            update: this.update,
+            render: this.render
+          });
+          this.game.state.add("MainMenu", MainMenu );
+          this.game.state.start("MainMenu"); // ?
+    }
 
-      public game: Phaser.Game;
+    public game: Phaser.Game;
 
-      public preload() {
+    public preload() {
 
-      }
+    }
 
-      // called when the game is created
-      public create() {
+    // called when the game is created
+    public create() {
 
-      }
+    }
 
-      // Called every "frame", counting the number of ticks per second would give you the famous "FPS", Frames Per Second
-      public update() {
+    // Called every "frame", counting the number of ticks per second would give you the famous "FPS", Frames Per Second
+    public update() {
 
-      }
+    }
 
-      public render() {
+    public render() {
 
-      }
-  }
+    }
 }
+
+let remake = new WormsRemake();

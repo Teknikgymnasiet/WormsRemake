@@ -1,5 +1,5 @@
-import { PlayerController } from "../player/PlayerController.ts";
-
+import { PlayerController } from "../player/PlayerController";
+import { IWeapon } from "./IWeapon";
 export class Weapon implements IWeapon {
   public displayImage : any;
   public soundEffect : string;
