@@ -1,4 +1,5 @@
 import { MainMenu } from "./states/MainMenu";
+import { GameRound } from "./states/GameRound";
 
 export class WormsRemake {
     constructor() {
@@ -8,8 +9,9 @@ export class WormsRemake {
             update: this.update,
             render: this.render
           });
+
           this.game.state.add("MainMenu", MainMenu );
-          this.game.state.start("MainMenu"); // ?
+          this.game.state.add("GameRound", GameRound );
     }
 
     public game: Phaser.Game;
@@ -20,7 +22,7 @@ export class WormsRemake {
 
     // called when the game is created
     public create() {
-
+          this.game.state.start("MainMenu"); 
     }
 
     // Called every "frame", counting the number of ticks per second would give you the famous "FPS", Frames Per Second
