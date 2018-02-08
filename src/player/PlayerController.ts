@@ -6,9 +6,17 @@ export class PlayerController {
     private _view: PlayerView;
     private _activeWeapon: any;
     private _position:any;
-    constructor(playerPicture:any) {
+    public game:any;
+
+    constructor(playerPicture:any, game:any) {
+        this.game = game;
+        this.game.load.image("Player",playerPicture);
         this._model = new PlayerModel();
-        this._view = new PlayerView(playerPicture);
+        this._view = new PlayerView( playerPicture, game );
+    }
+
+    get sprite() : any {
+      return this.view.playerSprite;
     }
 
     // Force change the position of the player sprite.
