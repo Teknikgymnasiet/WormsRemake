@@ -14,18 +14,7 @@ export class Weapons {
   }
 
   public addStandardWeapons() {
-    let RPG7 : any = {
-      "displayName" : "RPG-7",
-      "ID": "RPG7",
-      "displayImage" :  "../../assets/weapons/rpg7.png",
-      "soundEffect" :  "",
-      "minDamage": 45,
-      "maxDamage": 100,
-      "radius": 100,
-      "numberOfShots": 1,
-      "delayBetweenShots": 0,
-      "shootcallback": ""
-    };
+    let RPG7 = require("../weapon_configs/rpg7.json");
 
     this.add( RPG7 );
 

@@ -199,7 +199,42 @@ var PlayerController = /** @class */ (function () {
         this.game.load.image("Player", playerPicture);
         this._model = new PlayerModel_1.PlayerModel();
         this._view = new PlayerView_1.PlayerView(playerPicture, game);
+        this.game.input.keyboard.addKeyCapture([
+            Phaser.Keyboard.UP,
+            Phaser.Keyboard.DOWN,
+            Phaser.Keyboard.CONTROL
+        ]);
     }
+    PlayerController.prototype.update = function () {
+        if (this.activeWeapon == undefined) {
+            //console.log("Weapon is invalid!");
+            return;
+        }
+        if (this.game.input.keyboard.isDown(Phaser.Keyboard.CONTROL)) {
+            this.activeWeapon.shoot();
+        }
+        var AimUp = this.game.input.keyboard.isDown(Phaser.Keyboard.UP);
+        var AimDown = this.game.input.keyboard.isDown(Phaser.Keyboard.DOWN);
+        //  console.log("Vinkel och Riktnigt.", this.activeWeapon.sprite.angle, this.sprite.scale.x );
+        if (AimUp && this.activeWeapon.sprite.angle < 90) {
+            //  console.log("Aiming Up");
+            this.activeWeapon.sprite.angle += 1.25;
+        }
+        else if (AimDown && this.activeWeapon.sprite.angle > -35) {
+            //console.log("Aiming Down");
+            this.activeWeapon.sprite.angle -= 1.25;
+        }
+    };
+    Object.defineProperty(PlayerController.prototype, "activeWeapon", {
+        get: function () {
+            return this._activeWeapon;
+        },
+        set: function (weapon) {
+            this._activeWeapon = weapon;
+        },
+        enumerable: true,
+        configurable: true
+    });
     Object.defineProperty(PlayerController.prototype, "sprite", {
         get: function () {
             return this.view.playerSprite;
@@ -337,7 +372,8 @@ var GameRound = /** @class */ (function () {
         this.game.physics.arcade.gravity.y = this.Gravity;
         this._weps.weapons[0].owner = this.player;
         this._weps.weapons[0].createWeaponSprite();
-        console.log("Weapons:", this._weps);
+        this._testPlayer.activeWeapon = this._weps.weapons[0];
+        console.log("Player WEapon is set to:", this._weps.weapons[0]);
     };
     Object.defineProperty(GameRound.prototype, "player", {
         get: function () {
@@ -353,6 +389,9 @@ var GameRound = /** @class */ (function () {
         this.background.update();
         // Update collisions
         this.game.physics.arcade.collide(this._testPlayer.sprite, this.background.ground.ground);
+        if (this._testPlayer != undefined) {
+            this._testPlayer.update();
+        }
         if (this.leftInputIsActive()) {
             // If the LEFT key is down, set the player velocity to move left
             this.player.body.acceleration.x = -this.Acceleration;
@@ -404,7 +443,7 @@ var GameRound = /** @class */ (function () {
 }());
 exports.GameRound = GameRound;
 
-},{"../controller/BackgroundController":1,"../player/PlayerController":6,"../weapons/Weapons":13}],10:[function(require,module,exports){
+},{"../controller/BackgroundController":1,"../player/PlayerController":6,"../weapons/Weapons":14}],10:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var MenuButton_1 = require("../utils/MenuButton");
@@ -477,6 +516,20 @@ var MenuButton = /** @class */ (function () {
 exports.MenuButton = MenuButton;
 
 },{}],12:[function(require,module,exports){
+module.exports={
+  "displayName" : "RPG-7",
+  "ID": "RPG7",
+  "displayImage" :  "../../assets/weapons/rpg7.png",
+  "soundEffect" :  "",
+  "minDamage": 45,
+  "maxDamage": 100,
+  "radius": 100,
+  "numberOfShots": 1,
+  "delayBetweenShots": 0,
+  "shootcallback": ""
+}
+
+},{}],13:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var Weapon = /** @class */ (function () {
@@ -492,8 +545,11 @@ var Weapon = /** @class */ (function () {
         this.numberOfShots = config.numberOfShots;
         this.delayBetweenShots = config.delayBetweenShots;
         this.shootcallback = config.shootcallback;
+        this.crosshairTexture = (config.crosshairTexture != undefined) ? config.crosshairTexture : "../../assets/ui/scope.png";
         // Preload image
         this.game.load.image(this.ID, this.displayImage);
+        this.game.load.image("WeaponCrosshair", this.crosshairTexture);
+        this.game.load.image("Football", "../../assets/football.png");
     }
     Object.defineProperty(Weapon.prototype, "owner", {
         set: function (player) {
@@ -502,16 +558,39 @@ var Weapon = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(Weapon.prototype, "sprite", {
+        get: function () {
+            return this._sprite;
+        },
+        enumerable: true,
+        configurable: true
+    });
     Weapon.prototype.createWeaponSprite = function () {
         this._sprite = this._owner.addChild(this.game.make.sprite(0, 0, this.ID));
+        this._sprite.position.x = 0;
+        this._sprite.position.y = -16;
+        this._crosshair = this._sprite.addChild(this.game.make.sprite(-100, 0, "WeaponCrosshair"));
+        this._crosshair.scale.x = 0.1;
+        this._crosshair.scale.y = 0.1;
     };
     Weapon.prototype.shoot = function () {
+        var football = this._owner.addChild(this.game.make.sprite(0, 0, "Football"));
+        football.position.setTo(this._sprite.position.x, this._sprite.position.y);
+        //console.log("SKjuter!!");
+        this.game.physics.enable(football, Phaser.Physics.ARCADE);
+        console.log("SIktets position i världen:", this._crosshair.position);
+        var angle = this._sprite.angle / (180 / Math.PI);
+        var newX = Math.cos(angle);
+        var newY = Math.sin(angle);
+        var speed = 5000;
+        football.body.allowGravity = true;
+        football.body.velocity.setTo(-newX * speed, -newY * speed);
     };
     return Weapon;
 }());
 exports.Weapon = Weapon;
 
-},{}],13:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var Weapon_1 = require("./Weapon");
@@ -528,18 +607,7 @@ var Weapons = /** @class */ (function () {
         configurable: true
     });
     Weapons.prototype.addStandardWeapons = function () {
-        var RPG7 = {
-            "displayName": "RPG-7",
-            "ID": "RPG7",
-            "displayImage": "../../assets/weapons/rpg7.png",
-            "soundEffect": "",
-            "minDamage": 45,
-            "maxDamage": 100,
-            "radius": 100,
-            "numberOfShots": 1,
-            "delayBetweenShots": 0,
-            "shootcallback": ""
-        };
+        var RPG7 = require("../weapon_configs/rpg7.json");
         this.add(RPG7);
     };
     Weapons.prototype.add = function (cfg) {
@@ -550,4 +618,4 @@ var Weapons = /** @class */ (function () {
 }());
 exports.Weapons = Weapons;
 
-},{"./Weapon":12}]},{},[4]);
+},{"../weapon_configs/rpg7.json":12,"./Weapon":13}]},{},[4]);

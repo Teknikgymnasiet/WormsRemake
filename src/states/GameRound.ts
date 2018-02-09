@@ -53,6 +53,7 @@ export class GameRound {
       this._weps.weapons[0].owner = this.player;
       this._weps.weapons[0].createWeaponSprite();
 
+      this._testPlayer.activeWeapon = this._weps.weapons[0];
   }
 
 
@@ -69,7 +70,9 @@ export class GameRound {
     this.background.update();
     // Update collisions
     this.game.physics.arcade.collide( this._testPlayer.sprite, this.background.ground.ground );
-
+    if( this._testPlayer != undefined ) {
+      this._testPlayer.update();
+    }
     if (this.leftInputIsActive()) {
          // If the LEFT key is down, set the player velocity to move left
          this.player.body.acceleration.x = -this.Acceleration;

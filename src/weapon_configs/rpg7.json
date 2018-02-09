@@ -1,0 +1,12 @@
+{
+  "displayName" : "RPG-7",
+  "ID": "RPG7",
+  "displayImage" :  "../../assets/weapons/rpg7.png",
+  "soundEffect" :  "",
+  "minDamage": 45,
+  "maxDamage": 100,
+  "radius": 100,
+  "numberOfShots": 1,
+  "delayBetweenShots": 0,
+  "shootcallback": ""
+}

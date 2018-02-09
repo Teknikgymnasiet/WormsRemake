@@ -13,6 +13,44 @@ export class PlayerController {
         this.game.load.image("Player",playerPicture);
         this._model = new PlayerModel();
         this._view = new PlayerView( playerPicture, game );
+
+        this.game.input.keyboard.addKeyCapture([
+          Phaser.Keyboard.UP,
+          Phaser.Keyboard.DOWN,
+          Phaser.Keyboard.CONTROL
+        ]);
+
+    }
+
+    public update() {
+      if( this.activeWeapon == undefined ){
+      //console.log("Weapon is invalid!");
+        return;
+      }
+
+      if( this.game.input.keyboard.isDown(Phaser.Keyboard.CONTROL)) {
+        this.activeWeapon.shoot();
+      }
+
+      let AimUp = this.game.input.keyboard.isDown(Phaser.Keyboard.UP);
+      let AimDown = this.game.input.keyboard.isDown(Phaser.Keyboard.DOWN);
+
+    //  console.log("Vinkel och Riktnigt.", this.activeWeapon.sprite.angle, this.sprite.scale.x );
+      if( AimUp && this.activeWeapon.sprite.angle < 90 ) {
+        //  console.log("Aiming Up");
+          this.activeWeapon.sprite.angle += 1.25;
+      } else if ( AimDown && this.activeWeapon.sprite.angle > -35 ) {
+          //console.log("Aiming Down");
+          this.activeWeapon.sprite.angle -= 1.25;
+      }
+    }
+
+    set activeWeapon( weapon:any ) {
+      this._activeWeapon = weapon;
+    }
+
+    get activeWeapon() : any {
+      return this._activeWeapon;
     }
 
     get sprite() : any {
