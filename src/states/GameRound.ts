@@ -23,7 +23,7 @@ export class GameRound {
     this.background = new BackgroundController();
     this.background.game = this.game;
     this.background.preload();
-    this._testPlayer = new PlayerController("../../assets/player/worm1.png",this.game);
+    this._testPlayer = new PlayerController("../../assets/player/worm1_spritesheet.png",this.game);
     this._weps = new Weapons(this.game);
     this._weps.addStandardWeapons();
   }
@@ -49,11 +49,13 @@ export class GameRound {
       // Since we're jumping we need gravity
       this.game.physics.arcade.gravity.y = this.Gravity;
 
+      let wep = this._weps.weapons[0];
+      wep.owner = this.player;
+      wep.controller = this._testPlayer;
+      wep.createWeaponSprite();
+      this._testPlayer.activeWeapon = wep;
 
-      this._weps.weapons[0].owner = this.player;
-      this._weps.weapons[0].createWeaponSprite();
 
-      this._testPlayer.activeWeapon = this._weps.weapons[0];
   }
 
 
@@ -69,13 +71,18 @@ export class GameRound {
   public update(){
     this.background.update();
     // Update collisions
+    this._testPlayer.activeWeapon.update();
     this.game.physics.arcade.collide( this._testPlayer.sprite, this.background.ground.ground );
+
+
     if( this._testPlayer != undefined ) {
       this._testPlayer.update();
     }
     if (this.leftInputIsActive()) {
          // If the LEFT key is down, set the player velocity to move left
          this.player.body.acceleration.x = -this.Acceleration;
+         this.player.animations.play('walk', 6, false, false);
+
          if( this._pointingRight ) {
            this.player.anchor.setTo( 0.5, 0.5 );
            this.player.scale.x = 1;
@@ -83,6 +90,7 @@ export class GameRound {
          }
      } else if (this.rightInputIsActive()) {
          // If the RIGHT key is down, set the player velocity to move right
+         this.player.animations.play('walk', 6, false, false);
          if( !this._pointingRight ) {
             this.player.anchor.setTo( 0.5, 0.5 );
            this.player.scale.x = -1;
@@ -101,6 +109,7 @@ export class GameRound {
          this.player.body.velocity.y = this.JumpSpeed;
      }
   }
+
   private leftInputIsActive() {
     return this.game.input.keyboard.isDown(Phaser.Keyboard.LEFT);
   }

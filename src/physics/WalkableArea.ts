@@ -17,7 +17,7 @@ export class WalkableArea{
   public create() {
   //  this.game.physics.enable( [ sprite1, sprite2 ], Phaser.Physics.ARCADE);
    this.ground = this.game.add.group();
-   for(let x = 0; x < this.game.width; x += this.size ) {
+   for(let x = 0; x < this.game.width * 4; x += this.size ) {
        // Add the ground blocks, enable physics on each, make them immovable
        let groundBlock = this.game.add.sprite(x, this.game.height - this.size, 'IronPlate');
        //groundBlock.scale = this._scale;

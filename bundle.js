@@ -174,7 +174,7 @@ var WalkableArea = /** @class */ (function () {
     WalkableArea.prototype.create = function () {
         //  this.game.physics.enable( [ sprite1, sprite2 ], Phaser.Physics.ARCADE);
         this.ground = this.game.add.group();
-        for (var x = 0; x < this.game.width; x += this.size) {
+        for (var x = 0; x < this.game.width * 4; x += this.size) {
             // Add the ground blocks, enable physics on each, make them immovable
             var groundBlock = this.game.add.sprite(x, this.game.height - this.size, 'IronPlate');
             //groundBlock.scale = this._scale;
@@ -196,7 +196,8 @@ var PlayerView_1 = require("./PlayerView");
 var PlayerController = /** @class */ (function () {
     function PlayerController(playerPicture, game) {
         this.game = game;
-        this.game.load.image("Player", playerPicture);
+        //this.game.load.image("Player",playerPicture);
+        game.load.spritesheet('Player', playerPicture, 32, 32, 2);
         this._model = new PlayerModel_1.PlayerModel();
         this._view = new PlayerView_1.PlayerView(playerPicture, game);
         this.game.input.keyboard.addKeyCapture([
@@ -323,6 +324,7 @@ var PlayerView = /** @class */ (function () {
     });
     PlayerView.prototype.createPlayerSprite = function () {
         this._sprite = this.game.add.sprite(300, 100, 'Player');
+        this._sprite.animations.add('walk');
         this.game.physics.enable(this._sprite, Phaser.Physics.ARCADE);
         this._sprite.body.collideWorldBounds = true;
     };
@@ -349,7 +351,7 @@ var GameRound = /** @class */ (function () {
         this.background = new BackgroundController_1.BackgroundController();
         this.background.game = this.game;
         this.background.preload();
-        this._testPlayer = new PlayerController_1.PlayerController("../../assets/player/worm1.png", this.game);
+        this._testPlayer = new PlayerController_1.PlayerController("../../assets/player/worm1_spritesheet.png", this.game);
         this._weps = new Weapons_1.Weapons(this.game);
         this._weps.addStandardWeapons();
     };
@@ -370,9 +372,11 @@ var GameRound = /** @class */ (function () {
         this.player.body.drag.setTo(this.Drag, 0); // x, y
         // Since we're jumping we need gravity
         this.game.physics.arcade.gravity.y = this.Gravity;
-        this._weps.weapons[0].owner = this.player;
-        this._weps.weapons[0].createWeaponSprite();
-        this._testPlayer.activeWeapon = this._weps.weapons[0];
+        var wep = this._weps.weapons[0];
+        wep.owner = this.player;
+        wep.controller = this._testPlayer;
+        wep.createWeaponSprite();
+        this._testPlayer.activeWeapon = wep;
     };
     Object.defineProperty(GameRound.prototype, "player", {
         get: function () {
@@ -387,6 +391,7 @@ var GameRound = /** @class */ (function () {
     GameRound.prototype.update = function () {
         this.background.update();
         // Update collisions
+        this._testPlayer.activeWeapon.update();
         this.game.physics.arcade.collide(this._testPlayer.sprite, this.background.ground.ground);
         if (this._testPlayer != undefined) {
             this._testPlayer.update();
@@ -394,6 +399,7 @@ var GameRound = /** @class */ (function () {
         if (this.leftInputIsActive()) {
             // If the LEFT key is down, set the player velocity to move left
             this.player.body.acceleration.x = -this.Acceleration;
+            this.player.animations.play('walk', 6, false, false);
             if (this._pointingRight) {
                 this.player.anchor.setTo(0.5, 0.5);
                 this.player.scale.x = 1;
@@ -402,6 +408,7 @@ var GameRound = /** @class */ (function () {
         }
         else if (this.rightInputIsActive()) {
             // If the RIGHT key is down, set the player velocity to move right
+            this.player.animations.play('walk', 6, false, false);
             if (!this._pointingRight) {
                 this.player.anchor.setTo(0.5, 0.5);
                 this.player.scale.x = -1;
@@ -452,28 +459,28 @@ var MainMenu = /** @class */ (function () {
     MainMenu.prototype.preload = function () {
         this.game.load.image("MenuBackground", "../assets/menu/menu_background.png");
         this.game.load.image("MenuLogo", "../assets/menu/menu_logo.png");
-        this.game.load.image("MenuButton", "../assets/menu/button_test.png");
+        this.game.load.image("MenuButton", "../assets/menu/button1.png");
     };
     MainMenu.prototype.createButtons = function () {
         var button1 = new MenuButton_1.MenuButton(this.game, // Game REference
-        50, // X Position
-        100, // Y position
+        this.game.width / 2, // X Position
+        300, // Y position
         "MenuButton", // TExture ID
         function () {
             this.game.state.start("GameRound");
         }.bind(this), "Nytt Spel" // Knapptext
         );
         var button2 = new MenuButton_1.MenuButton(this.game, // Game REference
-        50, // X Position
-        200, // Y position
+        this.game.width / 2, // X Position
+        500, // Y position
         "MenuButton", // TExture ID
         function () {
             alert("Settings!");
         }, "Inställningar" // Knapptext
         );
         var button3 = new MenuButton_1.MenuButton(this.game, // Game REference
-        50, // X Position
-        300, // Y position
+        this.game.width / 2, // X Position
+        700, // Y position
         "MenuButton", // TExture ID
         function () {
             alert("Credots!");
@@ -484,7 +491,8 @@ var MainMenu = /** @class */ (function () {
     };
     MainMenu.prototype.create = function () {
         this._background = this.game.add.sprite(0, 0, "MenuBackground");
-        this._logo = this.game.add.sprite(0, 0, "MenuLogo");
+        this._logo = this.game.add.sprite(this.game.width / 2, 100, "MenuLogo");
+        this._logo.anchor.setTo(0.5, 0.5);
         this.createButtons();
     };
     return MainMenu;
@@ -497,9 +505,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var MenuButton = /** @class */ (function () {
     function MenuButton(game, x, y, textureId, callback, buttonText) {
         // ACtual button
-        this._button = game.add.button(x, y, textureId, callback, this, 0, 0, 0);
-        this._button.scale = new Phaser.Point(0.25, 0.25);
+        var width = 1179;
+        var height = 368;
+        this._button = game.add.button(x - width / 2, y - height / 2, textureId, callback, this, 0, 0, 0);
+        this._button.scale = new Phaser.Point(1, 1);
         // Text Label
+        this._button.alpha = 0.6;
         var textSettings = {
             fontSize: 32,
             font: "Arial Black",
@@ -507,8 +518,7 @@ var MenuButton = /** @class */ (function () {
             padding: new Phaser.Point(1, 1)
         };
         this._buttonText = game.add.text(x, y, buttonText, textSettings);
-        this._buttonText.position.y += 35;
-        this._buttonText.position.x += 10;
+        this._buttonText.anchor.setTo(0.5, 0.5);
     }
     return MenuButton;
 }());
@@ -522,10 +532,16 @@ module.exports={
   "soundEffect" :  "../../assets/sound/rpg_shoot.mp3",
   "minDamage": 45,
   "maxDamage": 100,
+  "launchForce": 1500,
+  "projectileImage": "../../assets/weapons/rpg_rocket.png",
   "radius": 100,
   "numberOfShots": 1,
   "delayBetweenShots": 0,
-  "shootcallback": ""
+  "shootcallback": "",
+  "bounciness": 0.5,
+  "maxBounces": 3,
+  "impactSound" : "",
+  "explosionSound" : ""
 }
 
 },{}],13:[function(require,module,exports){
@@ -533,7 +549,18 @@ module.exports={
 Object.defineProperty(exports, "__esModule", { value: true });
 var Weapon = /** @class */ (function () {
     function Weapon(config, game) {
+        this._numberOfBounces = 0;
         this.game = game;
+        this.parseWeaponConfig(config);
+        // Preload image
+        this.game.load.image(this.ID, this.displayImage);
+        this.game.load.image("WeaponCrosshair", this.crosshairTexture);
+        this.game.load.image(this.ID + "Football", config.projectileImage);
+        this.game.load.audio(this.ID + "Shoot", config.soundEffect);
+        // Initialize our projectile array
+        this._projectiles = [];
+    }
+    Weapon.prototype.parseWeaponConfig = function (config) {
         this.ID = config.ID;
         this.displayName = config.displayName;
         this.displayImage = config.displayImage;
@@ -541,16 +568,24 @@ var Weapon = /** @class */ (function () {
         this.minDamage = config.minDamage;
         this.maxDamage = config.maxDamage;
         this.radius = config.radius;
+        this.launchForce = config.launchForce;
         this.numberOfShots = config.numberOfShots;
         this.delayBetweenShots = config.delayBetweenShots;
         this.shootcallback = config.shootcallback;
         this.crosshairTexture = (config.crosshairTexture != undefined) ? config.crosshairTexture : "../../assets/ui/scope.png";
-        // Preload image
-        this.game.load.image(this.ID, this.displayImage);
-        this.game.load.image("WeaponCrosshair", this.crosshairTexture);
-        this.game.load.audio(this.ID + "Shoot", config.soundEffect);
-        this.game.load.image("Football", "../../assets/football.png");
-    }
+        this.bounciness = config.bounciness;
+        this.maxBounces = config.maxBounces;
+    };
+    Object.defineProperty(Weapon.prototype, "controller", {
+        get: function () {
+            return this._controller;
+        },
+        set: function (ctrl) {
+            this._controller = ctrl;
+        },
+        enumerable: true,
+        configurable: true
+    });
     Object.defineProperty(Weapon.prototype, "owner", {
         set: function (player) {
             this._owner = player;
@@ -568,25 +603,77 @@ var Weapon = /** @class */ (function () {
     Weapon.prototype.createWeaponSprite = function () {
         this._sprite = this._owner.addChild(this.game.make.sprite(0, 0, this.ID));
         this._sprite.position.x = 0;
-        this._sprite.position.y = -16;
+        this._sprite.position.y = 2;
+        this._sprite.anchor.setTo(0.5, 0.5);
         this._crosshair = this._sprite.addChild(this.game.make.sprite(-100, 0, "WeaponCrosshair"));
         this._crosshair.scale.x = 0.1;
         this._crosshair.scale.y = 0.1;
+        this._crosshair.anchor.setTo(0.5, 0.5);
         this._shootSound = this.game.add.audio(this.ID + "Shoot");
     };
+    Weapon.prototype.update = function () {
+        var groundCollection = this.game.state.getCurrentState().background.ground.ground;
+        for (var i = 0; i < this._projectiles.length; i++) {
+            this.game.physics.arcade.collide(this._projectiles[i], groundCollection, this.onCollide.bind(this));
+        }
+    };
+    Weapon.prototype.onCollide = function (obj1, obj2) {
+        this._numberOfBounces++;
+        obj1.body.velocity.setTo(obj1.body.velocity.x * 0.75, obj1.body.velocity.y * 0.75);
+        if (this._numberOfBounces >= this.maxBounces) {
+            this.Explode(obj1, obj2);
+        }
+        console.log(this._numberOfBounces);
+    };
+    Weapon.prototype.Explode = function (obj1, obj2) {
+        obj1.kill();
+        this.game.camera.follow(this._owner);
+    };
+    Weapon.prototype.reload = function () {
+        this._hasFired = false;
+    };
     Weapon.prototype.shoot = function () {
-        this._shootSound.play();
-        var football = this._owner.addChild(this.game.make.sprite(0, 0, "Football"));
-        football.position.setTo(this._sprite.position.x, this._sprite.position.y);
-        //console.log("SKjuter!!");
+        if (this._hasFired) {
+            return;
+        }
+        var football = this.game.add.sprite(this._owner.position.x, this._owner.position.y, this.ID + "Football");
+        this._projectiles.push(football);
+        // Activate the physics system for this object
         this.game.physics.enable(football, Phaser.Physics.ARCADE);
-        console.log("SIktets position i världen:", this._crosshair.position);
-        var angle = this._sprite.angle / (180 / Math.PI);
-        var newX = Math.cos(angle);
-        var newY = Math.sin(angle);
-        var speed = 5000;
+        // Configure the physics settings
         football.body.allowGravity = true;
-        football.body.velocity.setTo(-newX * speed, -newY * speed);
+        football.body.bounce.set(this.bounciness);
+        football.body.collideWorldBounds = true;
+        // Play our shoot sound
+        this._shootSound.play();
+        // Delay in seconds
+        var autoDeleteDelay = 5;
+        // Create a local variable so we can pass the reference to our anonymous timeout function.
+        var player = this._owner;
+        var self = this;
+        // Create an anonymous function for cleaning up the projectile in case it goes outside the map.
+        var deletionTimer = setTimeout(function () {
+            this.kill();
+            this.game.camera.follow(player);
+            self.reload();
+        }.bind(football), autoDeleteDelay * 1000);
+        // Make the camera follow the projectile
+        this.game.camera.follow(football);
+        // Since our crosshair is a child of the player object we can not extrapolate
+        // the launch angle by subtracting the player position from the crosshair position.
+        // to fix this we rotate the vector using sine and cosine
+        // but first we need to convert our degrees to radians
+        // this gives us a normalized vector we can use to multiply our launch force against.
+        var angle = this._sprite.angle / (180 / Math.PI);
+        // Since we change our movement by inverting the X scale of the player sprite
+        // We have to adjust for it when rotating our vector. If we're facing Right we need to get the inverse sine value.
+        var dir = this._owner.scale.x;
+        var newX = Math.cos(angle);
+        var newY = dir == -1 ? -Math.sin(angle) : Math.sin(angle);
+        // Apply the force
+        football.body.velocity.setTo((newX * this.launchForce) * -this._owner.scale.x, (newY * this.launchForce) * -this._owner.scale.x);
+        // Flip the switch so we can't fire again until we have reloaded
+        this._hasFired = true;
     };
     return Weapon;
 }());

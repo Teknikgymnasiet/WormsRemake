@@ -10,7 +10,9 @@ export class PlayerController {
 
     constructor(playerPicture:any, game:any) {
         this.game = game;
-        this.game.load.image("Player",playerPicture);
+        //this.game.load.image("Player",playerPicture);
+        game.load.spritesheet('Player', playerPicture, 32, 32, 2 );
+
         this._model = new PlayerModel();
         this._view = new PlayerView( playerPicture, game );
 

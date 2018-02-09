@@ -5,8 +5,14 @@
   "soundEffect" :  "../../assets/sound/rpg_shoot.mp3",
   "minDamage": 45,
   "maxDamage": 100,
+  "launchForce": 1500,
+  "projectileImage": "../../assets/weapons/rpg_rocket.png",
   "radius": 100,
   "numberOfShots": 1,
   "delayBetweenShots": 0,
-  "shootcallback": ""
+  "shootcallback": "",
+  "bounciness": 0.5,
+  "maxBounces": 3,
+  "impactSound" : "",
+  "explosionSound" : ""
 }

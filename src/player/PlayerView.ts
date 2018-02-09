@@ -15,6 +15,8 @@ export class PlayerView {
 
     public createPlayerSprite() {
       this._sprite = this.game.add.sprite(300, 100, 'Player');
+      this._sprite.animations.add('walk');
+    
       this.game.physics.enable(this._sprite, Phaser.Physics.ARCADE);
       this._sprite.body.collideWorldBounds = true;
     }

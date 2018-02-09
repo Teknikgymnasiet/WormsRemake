@@ -4,9 +4,12 @@ export class MenuButton{
 
     constructor(game:any, x:number, y:number, textureId:any, callback:any, buttonText:string ) {
       // ACtual button
-      this._button = game.add.button( x, y, textureId, callback, this, 0,0,0);
-      this._button.scale = new Phaser.Point( 0.25, 0.25);
+      let width : number = 1179
+      let height : number = 368
+      this._button = game.add.button( x - width/2, y - height / 2, textureId, callback, this, 0,0,0);
+      this._button.scale = new Phaser.Point( 1, 1);
       // Text Label
+      this._button.alpha = 0.6;
 
       let textSettings = {
        fontSize: 32,
@@ -14,10 +17,9 @@ export class MenuButton{
        anchor: 0.5,
        padding: new Phaser.Point( 1, 1 )
       };
-      
+
       this._buttonText = game.add.text( x, y, buttonText, textSettings );
-      this._buttonText.position.y += 35;
-      this._buttonText.position.x += 10;
+      this._buttonText.anchor.setTo( 0.5, 0.5 );
 
     }
 }
