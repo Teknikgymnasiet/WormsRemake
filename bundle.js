@@ -373,7 +373,6 @@ var GameRound = /** @class */ (function () {
         this._weps.weapons[0].owner = this.player;
         this._weps.weapons[0].createWeaponSprite();
         this._testPlayer.activeWeapon = this._weps.weapons[0];
-        console.log("Player WEapon is set to:", this._weps.weapons[0]);
     };
     Object.defineProperty(GameRound.prototype, "player", {
         get: function () {
@@ -520,7 +519,7 @@ module.exports={
   "displayName" : "RPG-7",
   "ID": "RPG7",
   "displayImage" :  "../../assets/weapons/rpg7.png",
-  "soundEffect" :  "",
+  "soundEffect" :  "../../assets/sound/rpg_shoot.mp3",
   "minDamage": 45,
   "maxDamage": 100,
   "radius": 100,
@@ -549,6 +548,7 @@ var Weapon = /** @class */ (function () {
         // Preload image
         this.game.load.image(this.ID, this.displayImage);
         this.game.load.image("WeaponCrosshair", this.crosshairTexture);
+        this.game.load.audio(this.ID + "Shoot", config.soundEffect);
         this.game.load.image("Football", "../../assets/football.png");
     }
     Object.defineProperty(Weapon.prototype, "owner", {
@@ -572,8 +572,10 @@ var Weapon = /** @class */ (function () {
         this._crosshair = this._sprite.addChild(this.game.make.sprite(-100, 0, "WeaponCrosshair"));
         this._crosshair.scale.x = 0.1;
         this._crosshair.scale.y = 0.1;
+        this._shootSound = this.game.add.audio(this.ID + "Shoot");
     };
     Weapon.prototype.shoot = function () {
+        this._shootSound.play();
         var football = this._owner.addChild(this.game.make.sprite(0, 0, "Football"));
         football.position.setTo(this._sprite.position.x, this._sprite.position.y);
         //console.log("SKjuter!!");

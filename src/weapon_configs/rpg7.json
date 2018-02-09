@@ -2,7 +2,7 @@
   "displayName" : "RPG-7",
   "ID": "RPG7",
   "displayImage" :  "../../assets/weapons/rpg7.png",
-  "soundEffect" :  "",
+  "soundEffect" :  "../../assets/sound/rpg_shoot.mp3",
   "minDamage": 45,
   "maxDamage": 100,
   "radius": 100,

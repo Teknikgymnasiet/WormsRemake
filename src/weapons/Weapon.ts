@@ -17,6 +17,7 @@ export class Weapon implements IWeapon {
 
   private _owner:any;
   private _crosshair:any;
+  private _shootSound:any;
 
   constructor( config:any,game:any ){
     this.game = game;
@@ -35,6 +36,7 @@ export class Weapon implements IWeapon {
     // Preload image
     this.game.load.image(this.ID, this.displayImage);
     this.game.load.image( "WeaponCrosshair", this.crosshairTexture );
+    this.game.load.audio( this.ID + "Shoot", config.soundEffect );
     this.game.load.image( "Football", "../../assets/football.png" );
 
   }
@@ -55,11 +57,13 @@ export class Weapon implements IWeapon {
     this._crosshair = this._sprite.addChild( this.game.make.sprite( -100,0, "WeaponCrosshair" ) );
     this._crosshair.scale.x = 0.1;
     this._crosshair.scale.y = 0.1;
-
+    this._shootSound = this.game.add.audio( this.ID + "Shoot" );
   }
 
   public shoot(){
 
+
+      this._shootSound.play();
       let football = this._owner.addChild(this.game.make.sprite( 0,0, "Football"));
       football.position.setTo( this._sprite.position.x, this._sprite.position.y );
         //console.log("SKjuter!!");
