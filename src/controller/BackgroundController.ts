@@ -32,7 +32,7 @@ export class BackgroundController {
 
   public create(){
     //game.add.tileSprite(0, 0, 1920, 1920, 'background');
-    this._background = this.game.add.tileSprite( 0,0,6400, 900,"GameBackground1");
+    this._background = this.game.add.tileSprite( 0,200,6400, 1280,"GameBackground1");
     this._background.scale = new Phaser.Point( 1, 1 );
     this._background.anchor = new Phaser.Point( 0.5, 0.5);
     this._background.alpha = 0.9;

@@ -9,7 +9,7 @@ export class MainMenu { // Phaser State
     }
 
     public preload(){
-       this.game.load.image("MenuBackground","../assets/menu/menu_background.png");
+       this.game.load.image("MenuBackground","../assets/heja_sverige.jpg");
        this.game.load.image("MenuLogo","../assets/menu/menu_logo.png");
        this.game.load.image("MenuButton","../assets/menu/button1.png");
     }
@@ -55,6 +55,8 @@ export class MainMenu { // Phaser State
 
     public create(){
         this._background = this.game.add.sprite( 0,0,"MenuBackground");
+        this._background.scale.setTo( 0.5, 0.5 );
+        this._background.alpha = 0.75;
         this._logo = this.game.add.sprite( this.game.width/2,100,"MenuLogo");
         this._logo.anchor.setTo( 0.5, 0.5 );
         this.createButtons();
