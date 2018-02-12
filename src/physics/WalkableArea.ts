@@ -1,13 +1,14 @@
-const SimplexNoise = require('simplex-noise')
-let simplex = new SimplexNoise(Math.random);
-
+const SimplexNoise = require('simplex-noise');
+// Simple class to handle map generation from sprites.
 export class WalkableArea{
   public game:any;
   public ground:any;
-  private _blockSize:number = 32;
+  private _blockSize:number = 64;
   private _scale:number = 1;
+  private config:any;
   constructor(game:any){
       this.game = game;
+      this.config = require("../cfg/gameconfig.json");
   }
 
   get size () :number {
@@ -21,7 +22,7 @@ export class WalkableArea{
   public create() {
   //  this.game.physics.enable( [ sprite1, sprite2 ], Phaser.Physics.ARCADE);
     this.ground = this.game.add.group();
-
+    let simplex = new SimplexNoise( Math.random);
     let height : number = 40;
     let width : number = 200;
     let noiseArray : any[] = [];
@@ -40,13 +41,13 @@ export class WalkableArea{
     for (var y = 0; y < height; y++) {
       for (let x = 0; x < width; x++) {
         //  console.log( "Val:", noiseArray[y][x] );
-          if( noiseArray[y][x] > 0.15 ) {
-              let a = -500 + ( x*this.size);
-              let b = 600 + ( y*this.size)
+          if( noiseArray[y][x] > -0.1 ) {
+            let a = -500 + ( x*this.size);
+            let b = 1600 + ( -y*this.size);
             let groundBlock = this.game.add.sprite( a, b, 'IronPlate');
             //groundBlock.scale = this._scale;
             groundBlock.position.setTo( a, b );
-          //  console.log(a,b);
+            //  console.log(a,b);
             this.game.physics.enable(groundBlock, Phaser.Physics.ARCADE);
             groundBlock.body.immovable = true;
             groundBlock.body.allowGravity = false;
@@ -54,17 +55,5 @@ export class WalkableArea{
           }
         }
     }
-
-
-  //  console.log( value );
-  /*  for(let x = 0; x < this.game.width * 4; x += this.size ) {
-       // Add the ground blocks, enable physics on each, make them immovable
-       let groundBlock = this.game.add.sprite(x, this.game.height - this.size, 'IronPlate');
-       //groundBlock.scale = this._scale;
-       this.game.physics.enable(groundBlock, Phaser.Physics.ARCADE);
-       groundBlock.body.immovable = true;
-       groundBlock.body.allowGravity = false;
-       this.ground.add(groundBlock);
-   }*/
   }
 }

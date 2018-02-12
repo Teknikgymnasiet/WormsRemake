@@ -37,7 +37,7 @@ export class BackgroundController {
     this._background.anchor = new Phaser.Point( 0.5, 0.5);
     this._background.alpha = 0.9;
 
-    this.game.world.setBounds(0, 0, 6400, 1920);
+    this.game.world.setBounds(0, 0, 6400, 2*1920);
 
     this._skyline = this.game.add.tileSprite( 0, 200, 6400, 820, "GameBackground2");
     this._skyline.scale = new Phaser.Point( 0.36, 0.36 );

@@ -417,6 +417,11 @@ if (typeof module !== 'undefined') {
 })();
 
 },{}],2:[function(require,module,exports){
+module.exports={
+  "LevelGenerationSeed" : "2"
+}
+
+},{}],3:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var BackgroundClouds_1 = require("../effects/BackgroundClouds");
@@ -448,7 +453,7 @@ var BackgroundController = /** @class */ (function () {
         this._background.scale = new Phaser.Point(1, 1);
         this._background.anchor = new Phaser.Point(0.5, 0.5);
         this._background.alpha = 0.9;
-        this.game.world.setBounds(0, 0, 6400, 1920);
+        this.game.world.setBounds(0, 0, 6400, 2 * 1920);
         this._skyline = this.game.add.tileSprite(0, 200, 6400, 820, "GameBackground2");
         this._skyline.scale = new Phaser.Point(0.36, 0.36);
         this.game.stage.backgroundColor = '#022968';
@@ -465,7 +470,7 @@ var BackgroundController = /** @class */ (function () {
 }());
 exports.BackgroundController = BackgroundController;
 
-},{"../effects/BackgroundClouds":3,"../effects/ForegroundWater":4,"../physics/WalkableArea":6}],3:[function(require,module,exports){
+},{"../effects/BackgroundClouds":4,"../effects/ForegroundWater":5,"../physics/WalkableArea":7}],4:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var BackgroundClouds = /** @class */ (function () {
@@ -509,7 +514,7 @@ var BackgroundClouds = /** @class */ (function () {
 }());
 exports.BackgroundClouds = BackgroundClouds;
 
-},{}],4:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var ForegroundWater = /** @class */ (function () {
@@ -538,7 +543,7 @@ var ForegroundWater = /** @class */ (function () {
 }());
 exports.ForegroundWater = ForegroundWater;
 
-},{}],5:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var MainMenu_1 = require("./states/MainMenu");
@@ -570,16 +575,17 @@ var WormsRemake = /** @class */ (function () {
 exports.WormsRemake = WormsRemake;
 var remake = new WormsRemake();
 
-},{"./states/GameRound":10,"./states/MainMenu":11}],6:[function(require,module,exports){
+},{"./states/GameRound":11,"./states/MainMenu":12}],7:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var SimplexNoise = require('simplex-noise');
-var simplex = new SimplexNoise(Math.random);
+// Simple class to handle map generation from sprites.
 var WalkableArea = /** @class */ (function () {
     function WalkableArea(game) {
-        this._blockSize = 32;
+        this._blockSize = 64;
         this._scale = 1;
         this.game = game;
+        this.config = require("../cfg/gameconfig.json");
     }
     Object.defineProperty(WalkableArea.prototype, "size", {
         get: function () {
@@ -595,6 +601,7 @@ var WalkableArea = /** @class */ (function () {
     WalkableArea.prototype.create = function () {
         //  this.game.physics.enable( [ sprite1, sprite2 ], Phaser.Physics.ARCADE);
         this.ground = this.game.add.group();
+        var simplex = new SimplexNoise(Math.random);
         var height = 40;
         var width = 200;
         var noiseArray = [];
@@ -608,17 +615,17 @@ var WalkableArea = /** @class */ (function () {
                 noiseArray[y][x] = simplex.noise2D(nx, ny);
             }
         }
-        console.log("noiseArray:", noiseArray);
+        //  console.log("noiseArray:", noiseArray);
         for (var y = 0; y < height; y++) {
             for (var x = 0; x < width; x++) {
-                console.log("Val:", noiseArray[y][x]);
-                if (noiseArray[y][x] > 0.15) {
+                //  console.log( "Val:", noiseArray[y][x] );
+                if (noiseArray[y][x] > -0.1) {
                     var a = -500 + (x * this.size);
-                    var b = 600 + (y * this.size);
+                    var b = 1600 + (-y * this.size);
                     var groundBlock = this.game.add.sprite(a, b, 'IronPlate');
                     //groundBlock.scale = this._scale;
                     groundBlock.position.setTo(a, b);
-                    console.log(a, b);
+                    //  console.log(a,b);
                     this.game.physics.enable(groundBlock, Phaser.Physics.ARCADE);
                     groundBlock.body.immovable = true;
                     groundBlock.body.allowGravity = false;
@@ -626,22 +633,12 @@ var WalkableArea = /** @class */ (function () {
                 }
             }
         }
-        //  console.log( value );
-        /*  for(let x = 0; x < this.game.width * 4; x += this.size ) {
-             // Add the ground blocks, enable physics on each, make them immovable
-             let groundBlock = this.game.add.sprite(x, this.game.height - this.size, 'IronPlate');
-             //groundBlock.scale = this._scale;
-             this.game.physics.enable(groundBlock, Phaser.Physics.ARCADE);
-             groundBlock.body.immovable = true;
-             groundBlock.body.allowGravity = false;
-             this.ground.add(groundBlock);
-         }*/
     };
     return WalkableArea;
 }());
 exports.WalkableArea = WalkableArea;
 
-},{"simplex-noise":1}],7:[function(require,module,exports){
+},{"../cfg/gameconfig.json":2,"simplex-noise":1}],8:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var PlayerModel_1 = require("./PlayerModel");
@@ -739,7 +736,7 @@ var PlayerController = /** @class */ (function () {
 }());
 exports.PlayerController = PlayerController;
 
-},{"./PlayerModel":8,"./PlayerView":9}],8:[function(require,module,exports){
+},{"./PlayerModel":9,"./PlayerView":10}],9:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var PlayerModel = /** @class */ (function () {
@@ -760,7 +757,7 @@ var PlayerModel = /** @class */ (function () {
 }());
 exports.PlayerModel = PlayerModel;
 
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var PlayerView = /** @class */ (function () {
@@ -785,7 +782,7 @@ var PlayerView = /** @class */ (function () {
 }());
 exports.PlayerView = PlayerView;
 
-},{}],10:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var BackgroundController_1 = require("../controller/BackgroundController");
@@ -793,12 +790,12 @@ var PlayerController_1 = require("../player/PlayerController");
 var Weapons_1 = require("../weapons/Weapons");
 var GameRound = /** @class */ (function () {
     function GameRound() {
+        this._pointingRight = false;
         this.Gravity = 1300;
         this.MaxSpeed = 200;
         this.Drag = 600;
         this.JumpSpeed = -500;
         this.Acceleration = 500;
-        this._pointingRight = false;
     }
     GameRound.prototype.preload = function () {
         this.background = new BackgroundController_1.BackgroundController();
@@ -810,9 +807,13 @@ var GameRound = /** @class */ (function () {
     };
     GameRound.prototype.create = function () {
         this.background.create();
+        // This is purely temporary for debugging player movement.
         this._testPlayer.createPlayer();
         this.player = this._testPlayer.sprite;
+        this.player.anchor.setTo(0.5, 0.5);
+        this.player.position.setTo(50, -500);
         this.game.camera.follow(this.player);
+        // Listen for input on the keys specified in this array
         this.game.input.keyboard.addKeyCapture([
             Phaser.Keyboard.LEFT,
             Phaser.Keyboard.RIGHT,
@@ -842,34 +843,38 @@ var GameRound = /** @class */ (function () {
         configurable: true
     });
     GameRound.prototype.update = function () {
+        // Update our background layer
         this.background.update();
-        // Update collisions
+        // Hacky weapon test. This needs proper handling
         this._testPlayer.activeWeapon.update();
+        // Update collisions
         this.game.physics.arcade.collide(this._testPlayer.sprite, this.background.ground.ground);
+        // Check if our player is valid
         if (this._testPlayer != undefined) {
             this._testPlayer.update();
         }
         if (this.leftInputIsActive()) {
             // If the LEFT key is down, set the player velocity to move left
             this.player.body.acceleration.x = -this.Acceleration;
+            // Using our sprite sheet we can make our worm walk. 6 fps seems like a suitable animation speed.
             this.player.animations.play('walk', 6, false, false);
             if (this._pointingRight) {
-                this.player.anchor.setTo(0.5, 0.5);
                 this.player.scale.x = 1;
                 this._pointingRight = false;
             }
         }
         else if (this.rightInputIsActive()) {
             // If the RIGHT key is down, set the player velocity to move right
+            this.player.body.acceleration.x = this.Acceleration;
+            // Play the walking animation
             this.player.animations.play('walk', 6, false, false);
             if (!this._pointingRight) {
-                this.player.anchor.setTo(0.5, 0.5);
                 this.player.scale.x = -1;
                 this._pointingRight = true;
             }
-            this.player.body.acceleration.x = this.Acceleration;
         }
         else {
+            // IF no keys are down, stop moving.
             this.player.body.acceleration.x = 0;
         }
         // Set a variable that is true when the player is touching the ground
@@ -902,7 +907,7 @@ var GameRound = /** @class */ (function () {
 }());
 exports.GameRound = GameRound;
 
-},{"../controller/BackgroundController":2,"../player/PlayerController":7,"../weapons/Weapons":15}],11:[function(require,module,exports){
+},{"../controller/BackgroundController":3,"../player/PlayerController":8,"../weapons/Weapons":16}],12:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var MenuButton_1 = require("../utils/MenuButton");
@@ -954,18 +959,19 @@ var MainMenu = /** @class */ (function () {
 }());
 exports.MainMenu = MainMenu;
 
-},{"../utils/MenuButton":12}],12:[function(require,module,exports){
+},{"../utils/MenuButton":13}],13:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var MenuButton = /** @class */ (function () {
     function MenuButton(game, x, y, textureId, callback, buttonText) {
-        // ACtual button
         var width = 1179;
         var height = 368;
+        // We use width/2 and height/2 to center the button relative to the position specified when creating it
         this._button = game.add.button(x - width / 2, y - height / 2, textureId, callback, this, 0, 0, 0);
         this._button.scale = new Phaser.Point(1, 1);
-        // Text Label
+        // Opacity of the button, slight see through for style
         this._button.alpha = 0.6;
+        // Text Label
         var textSettings = {
             fontSize: 32,
             font: "Arial Black",
@@ -979,7 +985,7 @@ var MenuButton = /** @class */ (function () {
 }());
 exports.MenuButton = MenuButton;
 
-},{}],13:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 module.exports={
   "displayName" : "RPG-7",
   "ID": "RPG7",
@@ -999,7 +1005,7 @@ module.exports={
   "explosionSound" : ""
 }
 
-},{}],14:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var Weapon = /** @class */ (function () {
@@ -1078,10 +1084,12 @@ var Weapon = /** @class */ (function () {
         if (this._numberOfBounces >= this.maxBounces) {
             this.Explode(obj1, obj2);
         }
-        console.log(this._numberOfBounces);
+        //console.log( this._numberOfBounces );
     };
     Weapon.prototype.Explode = function (obj1, obj2) {
         obj1.kill();
+        obj2.body.enable = false;
+        obj2.kill();
         setTimeout(function () {
             this.game.camera.follow(this._owner);
         }.bind(this), 3500);
@@ -1102,7 +1110,7 @@ var Weapon = /** @class */ (function () {
         football.body.bounce.set(this.bounciness);
         football.body.collideWorldBounds = true;
         // Play our shoot sound
-        this._shootSound.play();
+        //  this._shootSound.play();
         // Delay in seconds
         var autoDeleteDelay = 5;
         // Create a local variable so we can pass the reference to our anonymous timeout function.
@@ -1136,7 +1144,7 @@ var Weapon = /** @class */ (function () {
 }());
 exports.Weapon = Weapon;
 
-},{}],15:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var Weapon_1 = require("./Weapon");
@@ -1164,4 +1172,4 @@ var Weapons = /** @class */ (function () {
 }());
 exports.Weapons = Weapons;
 
-},{"../weapon_configs/rpg7.json":13,"./Weapon":14}]},{},[5]);
+},{"../weapon_configs/rpg7.json":14,"./Weapon":15}]},{},[6]);

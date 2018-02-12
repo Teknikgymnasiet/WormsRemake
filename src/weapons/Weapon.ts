@@ -105,11 +105,13 @@ export class Weapon implements IWeapon {
     if( this._numberOfBounces >= this.maxBounces ) {
         this.Explode( obj1, obj2 );
     }
-    console.log( this._numberOfBounces );
+    //console.log( this._numberOfBounces );
   }
 
   public Explode( obj1:any, obj2: any ) {
       obj1.kill();
+      obj2.body.enable = false;
+      obj2.kill();
       setTimeout( function(){
         this.game.camera.follow( this._owner );
       }.bind(this), 3500 );
@@ -136,7 +138,7 @@ export class Weapon implements IWeapon {
       football.body.collideWorldBounds = true;
 
       // Play our shoot sound
-      this._shootSound.play();
+    //  this._shootSound.play();
 
       // Delay in seconds
       let autoDeleteDelay : number = 5;

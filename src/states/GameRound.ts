@@ -3,17 +3,19 @@ import { PlayerController } from "../player/PlayerController";
 import { Weapons } from "../weapons/Weapons";
 
 export class GameRound {
-  public game : any;
   private _backgroundController : BackgroundController;
   private _testPlayer:any;
   private _player:any;
+  private _pointingRight:boolean = false;
+  private _weps:any;
+
+  public game : any;
   public Gravity : number = 1300;
   public MaxSpeed : number = 200;
   public Drag : number = 600;
   public JumpSpeed : number = -500;
   public Acceleration : number = 500;
-  private _pointingRight:boolean = false;
-  private _weps:any;
+
 
   constructor() {
 
@@ -30,11 +32,15 @@ export class GameRound {
 
   public create(){
     this.background.create();
+
+    // This is purely temporary for debugging player movement.
     this._testPlayer.createPlayer();
     this.player = this._testPlayer.sprite;
-
+    this.player.anchor.setTo(0.5,0.5);
+    this.player.position.setTo( 50, -500 );
     this.game.camera.follow( this.player );
 
+    // Listen for input on the keys specified in this array
     this.game.input.keyboard.addKeyCapture([
       Phaser.Keyboard.LEFT,
       Phaser.Keyboard.RIGHT,
@@ -58,8 +64,6 @@ export class GameRound {
 
   }
 
-
-
   set player(p:any){
     this._player = p;
   }
@@ -69,35 +73,46 @@ export class GameRound {
   }
 
   public update(){
+    // Update our background layer
     this.background.update();
-    // Update collisions
+
+    // Hacky weapon test. This needs proper handling
     this._testPlayer.activeWeapon.update();
+
+    // Update collisions
     this.game.physics.arcade.collide( this._testPlayer.sprite, this.background.ground.ground );
 
-
+    // Check if our player is valid
     if( this._testPlayer != undefined ) {
       this._testPlayer.update();
+
     }
     if (this.leftInputIsActive()) {
          // If the LEFT key is down, set the player velocity to move left
          this.player.body.acceleration.x = -this.Acceleration;
+         // Using our sprite sheet we can make our worm walk. 6 fps seems like a suitable animation speed.
          this.player.animations.play('walk', 6, false, false);
 
          if( this._pointingRight ) {
-           this.player.anchor.setTo( 0.5, 0.5 );
            this.player.scale.x = 1;
            this._pointingRight = false;
+
          }
      } else if (this.rightInputIsActive()) {
          // If the RIGHT key is down, set the player velocity to move right
+         this.player.body.acceleration.x = this.Acceleration;
+         // Play the walking animation
          this.player.animations.play('walk', 6, false, false);
+
          if( !this._pointingRight ) {
-            this.player.anchor.setTo( 0.5, 0.5 );
            this.player.scale.x = -1;
            this._pointingRight = true;
+
          }
-         this.player.body.acceleration.x = this.Acceleration;
+
+
      } else {
+        // IF no keys are down, stop moving.
          this.player.body.acceleration.x = 0;
      }
 
