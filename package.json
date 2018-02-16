@@ -21,7 +21,9 @@
     "typescript": "^2.6.2"
   },
   "dependencies": {
+    "@types/electron": "^1.6.10",
     "connect": "^3.6.5",
+    "electron": "^1.8.2",
     "gulp": "^3.9.1",
     "gulp-typescript": "^3.2.4",
     "http": "0.0.0",
