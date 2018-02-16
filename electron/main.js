@@ -8,11 +8,11 @@ const BrowserWindow = electron.BrowserWindow
 let mainWindow;
 
 function createWindow () {
-  mainWindow = new BrowserWindow({width: 768, height: 432});
+  mainWindow = new BrowserWindow({width: 600, height: 900});
   mainWindow.loadURL(`file://${__dirname}/electron/index.html`);
 
   mainWindow.webContents.openDevTools();
-
+  mainWindow.setMenu(null);
   mainWindow.on('closed', function () {
     mainWindow = null
   });
