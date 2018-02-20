@@ -1,5 +1,4 @@
-// All avalible options can be found at:
-// https://electronjs.org/docs/api/browser-window
+
 
 export class WindowManager {
     // Our Electron instance
@@ -40,5 +39,10 @@ export class WindowManager {
         if (userAgent.indexOf(' electron/') > -1) {
            return true;
         }
+    }
+
+    // Make keybind?
+    public openDevTools():void {
+        this.mainWindow.webContents.openDevTools();
     }
 }
