@@ -8,7 +8,12 @@ const BrowserWindow = electron.BrowserWindow
 let mainWindow;
 
 function createWindow () {
-  mainWindow = new BrowserWindow({width: 600, height: 900});
+  mainWindow = new BrowserWindow({
+    width: 600, 
+    height: 900,
+    resizable: false,
+    maximizable: false
+  });
   mainWindow.loadURL(`file://${__dirname}/index.html`);
 
   mainWindow.webContents.openDevTools();
