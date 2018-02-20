@@ -7,7 +7,8 @@
     "start": "npm run build:live",
     "web": "node webserver.js",
     "build:live": "nodemon --exec ./node_modules/.bin/ts-node -- ./src/main.ts",
-    "compile": "browserify \"src/main.ts\" -p [ tsify --noImplicitAny ] > bundle.js"
+    "compile": "browserify \"src/main.ts\" -p [ tsify --noImplicitAny ] > bundle.js",
+    "electron": "npx electron electron/main.js"
   },
   "keywords": [],
   "author": "",
