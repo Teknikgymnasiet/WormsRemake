@@ -9,7 +9,7 @@ let mainWindow;
 
 function createWindow () {
   mainWindow = new BrowserWindow({width: 600, height: 900});
-  mainWindow.loadURL(`file://${__dirname}/electron/index.html`);
+  mainWindow.loadURL(`file://${__dirname}/index.html`);
 
   mainWindow.webContents.openDevTools();
   mainWindow.setMenu(null);
