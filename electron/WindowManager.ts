@@ -1,9 +1,10 @@
-
+// All avalible options can be found at:
+// https://electronjs.org/docs/api/browser-window
 
 export class WindowManager {
     // Our Electron instance
     private mainWindow;
-    // Boundle.js window inside our electronwindow
+    // Referance Boundle.js window inside our electronwindow
     public gameWindow;
 
     public windowTitle:string = "PhaserJS Worms Remake";
