@@ -1,0 +1,18 @@
+Electron BrowserWindow:
+All avalible options can be found at:
+https://electronjs.org/docs/api/browser-window
+
+
+// TODO:
+Get screen size.
+
+Add Buttons specific for when ran in electron,
+eg fullscreen and exit
+Use WindowManager.ElectronIsRunning
+
+Add function to set scrrensize
+
+make electron/main.js into typescript. 
+
+
+Add settings loader (Own branch SettingsManager?)
