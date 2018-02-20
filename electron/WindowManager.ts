@@ -1,8 +1,10 @@
 
 
 export class WindowManager {
+    // Our Electron instance
+    private mainWindow;
+    // Boundle.js window inside our electronwindow
     public gameWindow;
-    private mainWindow = this.gameWindow;
 
     public windowTitle:string = "PhaserJS Worms Remake";
     public gameIcon = '../assets/gameIcon.png';
@@ -26,4 +28,16 @@ export class WindowManager {
         enableLargerThanScreen: false,
         webPreferences: this.webPreferences,
     };
+
+
+    public toggleFullscreen():void {
+        this.mainWindow.setFullscreen( !this.mainWindow.isFullscreen() );
+    }
+
+    public ElectronIsRunning():boolean {
+        var userAgent = navigator.userAgent.toLowerCase();
+        if (userAgent.indexOf(' electron/') > -1) {
+           return true;
+        }
+    }
 }
