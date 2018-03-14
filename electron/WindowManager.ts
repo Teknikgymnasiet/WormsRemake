@@ -1,12 +1,12 @@
-
+const ElectronWindow = require('./main.js');
 export class WindowManager {
     // Our Electron instance
-    public mainWindow;
+    public mainWindow = ElectronWindow.mainWindow;
 
     public windowTitle: string = "PhaserJS Worms Remake";
     public gameIcon = "../assets/gameIcon.png";
 
-    public webPreferences = {
+    private webPreferences = {
         devTools: true,
         nodeIntegration: true,
         // Read about multithreading, left false as default
@@ -15,7 +15,7 @@ export class WindowManager {
         zoomFactor: 1.0,
     };
 
-    public WindowOptions = {
+    private WindowOptions = {
         width: 600,
         height: 900,
         title: this.windowTitle,
