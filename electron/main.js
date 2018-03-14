@@ -1,29 +1,13 @@
-const electron = require('electron');
-const app = electron.app;
+const WindowManager = require('./WindowManager');
+const app = WindowManager.app;
 // create native browser window.
-const BrowserWindow = electron.BrowserWindow;
+const BrowserWindow = WindowManager.BrowserWindow;
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
-let mainWindow;
+let mainWindow = WindowManager.mainWindow;
 
-function createWindow() {
-  this.mainWindow = new BrowserWindow({
-    width: 600,
-    height: 900,
-    resizable: false,
-    maximizable: false,
-  });
-  this.mainWindow.loadURL(`http://127.0.0.1:1337/elec`);
-
-  this.mainWindow.webContents.openDevTools();
-  this.mainWindow.setMenu(null);
-  this.mainWindow.on('closed', function() {
-    this.mainWindow = null;
-  });
-}
-
-app.on('ready', createWindow);
+app.on('ready', WindowManager.createWindow);
 
 // Quit when all windows are closed on OSX and Linux
 app.on('window-all-closed', function() {
