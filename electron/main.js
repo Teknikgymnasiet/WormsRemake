@@ -1,13 +1,13 @@
-const WindowManager = require('./WindowManager');
-const app = WindowManager.app;
-// create native browser window.
-const BrowserWindow = WindowManager.BrowserWindow;
+const WindowManager = require('./WindowManager.js');
+const electron = require('electron');
+const app = electron.app;
+
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
-let mainWindow = WindowManager.mainWindow;
+let mainWindow;
 
-app.on('ready', WindowManager.createWindow);
+app.on('ready', WindowManager.createWindow());
 
 // Quit when all windows are closed on OSX and Linux
 app.on('window-all-closed', function() {
@@ -18,6 +18,6 @@ app.on('window-all-closed', function() {
 // Safety
 app.on('activate', function() {
   if (this.mainWindow === null) {
-    createWindow();
+    WindowManager.createWindow();
   }
 });

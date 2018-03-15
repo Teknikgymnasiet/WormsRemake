@@ -1,11 +1,11 @@
 const electron = require('electron');
-const app = electron.app;
+const elecwin = require('./main.js');
 // create native browser window.
 const BrowserWindow = electron.BrowserWindow;
 
 export class WindowManager {
     // Our Electron instance
-    public mainWindow;
+    public mainWindow = elecwin.mainWindow;
 
     public windowTitle: string = "PhaserJS Worms Remake";
     public gameIcon = "../assets/gameIcon.png";
@@ -31,16 +31,17 @@ export class WindowManager {
         webPreferences: this.webPreferences,
     };
 
-    protected createWindow() {
+    public createWindow() {
         this.mainWindow = new BrowserWindow(this.WindowOptions);
 
         this.mainWindow.loadURL(`http://127.0.0.1:1337/elec`);
         this.mainWindow.webContents.openDevTools();
         this.mainWindow.setMenu(null);
+
         this.mainWindow.on('closed', function() {
-        this.mainWindow = null;
+            this.mainWindow = null;
         });
-      }
+    }
 
     public toggleFullscreen(): void {
         this.mainWindow.setFullscreen(!this.mainWindow.isFullscreen());
