@@ -26,11 +26,11 @@ export class WindowManager {
         webPreferences: this.webPreferences,
     };
 
-    public toggleFullscreen(): void {
-        this.mainWindow.setFullscreen(!this.mainWindow.isFullscreen());
+    public static toggleFullscreen(): void {
+        WindowManager.mainWindow.setFullscreen(!WindowManager.mainWindow.isFullscreen());
     }
 
-    public ElectronIsRunning(): boolean {
+    public static ElectronIsRunning(): boolean {
         const userAgent = navigator.userAgent.toLowerCase();
         if (userAgent.indexOf(" electron/") > -1) {
             return true;
@@ -38,7 +38,7 @@ export class WindowManager {
     }
 
     // Make keybind?
-    public openDevTools(): void {
-        this.mainWindow.webContents.openDevTools();
+    public static openDevTools(): void {
+        WindowManager.mainWindow.webContents.openDevTools();
     }
 }

@@ -24,10 +24,10 @@ var WindowManager = /** @class */ (function () {
             webPreferences: this.webPreferences
         };
     }
-    WindowManager.prototype.toggleFullscreen = function () {
-        this.mainWindow.setFullscreen(!this.mainWindow.isFullscreen());
+    WindowManager.toggleFullscreen = function () {
+        WindowManager.mainWindow.setFullscreen(!WindowManager.mainWindow.isFullscreen());
     };
-    WindowManager.prototype.ElectronIsRunning = function () {
+    WindowManager.ElectronIsRunning = function () {
         var userAgent = navigator.userAgent.toLowerCase();
         if (userAgent.indexOf(" electron/") > -1) {
             return true;

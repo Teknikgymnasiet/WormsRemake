@@ -1,3 +1,4 @@
+import { WindowManager } from "../../electron/WindowManager";
 import { MenuButton } from "../utils/MenuButton";
 
 export class MainMenu { // Phaser State
@@ -15,15 +16,15 @@ export class MainMenu { // Phaser State
     }
 
     private createButtons() {
-        let button1 = new MenuButton(
-          this.game, // Game REference
-          50, // X Position
-          100,  // Y position
-          "MenuButton", // TExture ID
-            function(){ // Callback, ONCLick
-                  this.game.state.start("GameRound"); 
-            }.bind(this),
-          "Nytt Spel"  // Knapptext
+      let button1 = new MenuButton(
+        this.game, // Game REference
+        50, // X Position
+        100,  // Y position
+        "MenuButton", // TExture ID
+          function(){ // Callback, ONCLick
+            this.game.state.start("GameRound"); 
+          }.bind(this),
+        "Nytt Spel" // Knapptext
       );
 
       let button2 = new MenuButton(
@@ -47,6 +48,19 @@ export class MainMenu { // Phaser State
           },
         "Credits"     // Knapptext
       );
+      if (WindowManager.ElectronIsRunning()) {
+        let fsButton = new MenuButton(
+        this.game,
+        50,
+        400,
+        "MenuButton",
+        () => {
+          WindowManager.toggleFullscreen();
+        },
+        "Toggle Fullscreen",
+        );
+      }
+      
     }
 
     public update() {
