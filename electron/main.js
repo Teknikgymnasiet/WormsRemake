@@ -1,3 +1,4 @@
+const WindowManager = require('./WindowManager.js');
 const electron = require('electron');
 const app = electron.app;
 // create native browser window.
@@ -8,15 +9,10 @@ const BrowserWindow = electron.BrowserWindow;
 let mainWindow;
 
 function createWindow() {
-  this.mainWindow = new BrowserWindow({
-    width: 600,
-    height: 900,
-    resizable: false,
-    maximizable: false,
-  });
+  this.mainWindow = new BrowserWindow(WindowManager.WindowOptions);
   this.mainWindow.loadURL(`http://127.0.0.1:1337/elec`);
 
-  this.mainWindow.webContents.openDevTools();
+  //this.mainWindow.webContents.openDevTools();
   this.mainWindow.setMenu(null);
   this.mainWindow.on('closed', function() {
     this.mainWindow = null;
