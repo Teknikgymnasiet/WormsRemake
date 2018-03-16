@@ -1,5 +1,6 @@
 "use strict";
 exports.__esModule = true;
+<<<<<<< HEAD
 var electron = require('electron');
 var elecwin = require('./main.js');
 // create native browser window.
@@ -8,6 +9,10 @@ var WindowManager = /** @class */ (function () {
     function WindowManager() {
         // Our Electron instance
         this.mainWindow = elecwin.mainWindow;
+=======
+var WindowManager = /** @class */ (function () {
+    function WindowManager() {
+>>>>>>> elecnew
         this.windowTitle = "PhaserJS Worms Remake";
         this.gameIcon = "../assets/gameIcon.png";
         this.webPreferences = {
@@ -30,6 +35,7 @@ var WindowManager = /** @class */ (function () {
             webPreferences: this.webPreferences
         };
     }
+<<<<<<< HEAD
     WindowManager.prototype.createWindow = function () {
         this.mainWindow = new BrowserWindow(this.WindowOptions);
         this.mainWindow.loadURL("http://127.0.0.1:1337/elec");
@@ -43,6 +49,12 @@ var WindowManager = /** @class */ (function () {
         this.mainWindow.setFullscreen(!this.mainWindow.isFullscreen());
     };
     WindowManager.prototype.ElectronIsRunning = function () {
+=======
+    WindowManager.toggleFullscreen = function () {
+        WindowManager.mainWindow.setFullscreen(!WindowManager.mainWindow.isFullscreen());
+    };
+    WindowManager.ElectronIsRunning = function () {
+>>>>>>> elecnew
         var userAgent = navigator.userAgent.toLowerCase();
         if (userAgent.indexOf(" electron/") > -1) {
             return true;
