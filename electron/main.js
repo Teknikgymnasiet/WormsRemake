@@ -1,7 +1,7 @@
 const WindowManager = require('./WindowManager.js');
 const electron = require('electron');
 const app = electron.app;
-
+const BrowserWindow = electron.BrowserWindow;
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -16,6 +16,17 @@ function createWindow() {
   this.mainWindow.on('closed', function() {
     this.mainWindow = null;
   });
+}
+
+function toggleFullscreen() {
+  this.mainWindow.setFullscreen(!this.mainWindow.isFullscreen());
+}
+
+function ElectronIsRunning() {
+  const userAgent = navigator.userAgent.toLowerCase();
+  if (userAgent.indexOf(" electron/") > -1) {
+      return true;
+  }
 }
 
 app.on('ready', createWindow);
