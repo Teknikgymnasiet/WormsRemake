@@ -1,11 +1,12 @@
+import {BrowserWindow} from 'electron';
 export class WindowManager {
     // Our Electron instance
-    public mainWindow;
+    static mainWindow = Electron.BrowserWindow;
 
-    public windowTitle: string = "PhaserJS Worms Remake";
-    public gameIcon = "../assets/gameIcon.png";
+    private windowTitle: string = "PhaserJS Worms Remake";
+    private gameIcon = "../assets/gameIcon.png";
 
-    public webPreferences = {
+    private webPreferences = {
         devTools: true,
         nodeIntegration: true,
         // Read about multithreading, left false as default
@@ -14,7 +15,7 @@ export class WindowManager {
         zoomFactor: 1.0,
     };
 
-    public WindowOptions = {
+    private WindowOptions = {
         width: 600,
         height: 900,
         title: this.windowTitle,
@@ -26,11 +27,11 @@ export class WindowManager {
         webPreferences: this.webPreferences,
     };
 
-    public static toggleFullscreen(): void {
+    static toggleFullscreen(): void {
         WindowManager.mainWindow.setFullscreen(!WindowManager.mainWindow.isFullscreen());
     }
 
-    public static ElectronIsRunning(): boolean {
+    static ElectronIsRunning(): boolean {
         const userAgent = navigator.userAgent.toLowerCase();
         if (userAgent.indexOf(" electron/") > -1) {
             return true;
@@ -38,7 +39,7 @@ export class WindowManager {
     }
 
     // Make keybind?
-    public static openDevTools(): void {
+    static openDevTools(): void {
         WindowManager.mainWindow.webContents.openDevTools();
     }
 }
