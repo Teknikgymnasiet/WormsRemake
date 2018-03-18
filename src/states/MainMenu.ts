@@ -1,6 +1,6 @@
 import { WindowManager } from "../../electron/WindowManager";
 import { MenuButton } from "../utils/MenuButton";
-
+const wmg = require('../../electron/');
 export class MainMenu { // Phaser State
     public game:any;
     private _logo:any;
