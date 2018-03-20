@@ -28,7 +28,7 @@ export default class gameWindow {
         enableLargerThanScreen: false,
         webPreferences: this.webPreferences,
     };
-
+ 
     private static createWindow(): void {
         gameWindow.mainWindow = new gameWindow.BrowserWindow(
             gameWindow.prototype.WindowOptions
