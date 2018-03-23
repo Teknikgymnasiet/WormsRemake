@@ -42,7 +42,7 @@ export default class gameWindow {
     }
 
     private static onReady(): void {
-        gameWindow.createWindow;
+        gameWindow.createWindow();
     }
 
     private static onActivate(): void {
