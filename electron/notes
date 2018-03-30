@@ -12,7 +12,6 @@ Use WindowManager.ElectronIsRunning
 
 Add function to set scrrensize
 
-make electron/main.js into typescript. 
+//make electron/main.js into typescript. 
 
-
-Add settings loader (Own branch SettingsManager?)
+Save electron settings in JSON
