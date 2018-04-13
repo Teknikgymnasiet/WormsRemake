@@ -1,4 +1,4 @@
 import { app, BrowserWindow } from 'electron';
-import gameWindow from './gameWindow';
+import Window from './Window';
 
-gameWindow.init(app, BrowserWindow);
+Window.init(app, BrowserWindow);
