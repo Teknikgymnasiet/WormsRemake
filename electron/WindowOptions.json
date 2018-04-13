@@ -1,0 +1,17 @@
+{
+    "width": 600,
+    "height": 900,
+    "title": "PhaserJS Worms Remake",
+    "icon": "../assets/gameIcon.png",
+    "resizable": false,
+    "maximizable": false,
+    "fullscreenable": true,
+    "enableLargerThanScreen": false,
+    "webPreferences": {
+        "devTools": true,
+        "nodeIntegration": true,
+        "nodeIntegrationInWorker": false,
+        "plugins": false,
+        "zoomFactor": 1.0
+    }
+}

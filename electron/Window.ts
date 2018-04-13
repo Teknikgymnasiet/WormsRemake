@@ -4,30 +4,6 @@ export default class Window {
     static mainWindow: Electron.BrowserWindow;
     static application: Electron.App;
     static BrowserWindow;
-
-    private windowTitle: string = "PhaserJS Worms Remake";
-    private gameIcon: string = "../assets/gameIcon.png";
-
-    private webPreferences = {
-        devTools: true,
-        nodeIntegration: true,
-        // Read about multithreading, left false as default
-        nodeIntegrationInWorker: false,
-        plugins: false,
-        zoomFactor: 1.0,
-    };
-
-    protected WindowOptions = {
-        width: 600,
-        height: 900,
-        title: this.windowTitle,
-        icon: this.gameIcon,
-        resizable: false,
-        maximizable: false,
-        fullscreenable: true,
-        enableLargerThanScreen: false,
-        webPreferences: this.webPreferences,
-    };
  
     private static createWindow(): void {
         Window.mainWindow = new Window.BrowserWindow(
