@@ -1,6 +1,6 @@
 {
-    "width": 600,
-    "height": 900,
+    "width": 900,
+    "height": 600,
     "title": "PhaserJS Worms Remake",
     "icon": "../assets/gameIcon.png",
     "resizable": false,

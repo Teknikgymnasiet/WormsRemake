@@ -1,14 +1,19 @@
 import {BrowserWindow} from 'electron';
+import WindowManager from './WindowManager';
 
 export default class Window {
     static mainWindow: Electron.BrowserWindow;
     static application: Electron.App;
-    static BrowserWindow;
-    static WindowOptions;
+    static BrowserWindow: any;
+    static WindowOptions: any;
+    static Manager: any;
  
     private static createWindow(): void {
         Window.mainWindow = new Window.BrowserWindow(
             Window.WindowOptions
+        );
+        Window.Manager = new WindowManager(
+            Window.mainWindow
         );
 
         Window.mainWindow.loadURL(`http://127.0.0.1:1337/elec`);

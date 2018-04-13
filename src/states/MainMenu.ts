@@ -1,4 +1,4 @@
-import { WindowManager } from "../../electron/WindowManager";
+import Window from "../../electron/Window";
 import { MenuButton } from "../utils/MenuButton";
 const wmg = require('../../electron/');
 export class MainMenu { // Phaser State
@@ -48,15 +48,13 @@ export class MainMenu { // Phaser State
           },
         "Credits"     // Knapptext
       );
-      if (WindowManager.ElectronIsRunning()) {
+      if (Window.Manager.ElectronIsRunning()) {
         let fsButton = new MenuButton(
         this.game,
         50,
         400,
         "MenuButton",
-        () => {
-          WindowManager.toggleFullscreen();
-        },
+        Window.Manager.toggleFullscreen,
         "Toggle Fullscreen",
         );
       }
